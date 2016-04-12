@@ -1,42 +1,10 @@
 # forensic_reporter [![Build Status](https://travis-ci.org/evertrue/forensic_reporter-cookbook.svg)](https://travis-ci.org/evertrue/forensic_reporter-cookbook)
 
-TODO: Enter the cookbook description here.
-
-# Requirements
-
-* `apt` cookbook
-* `some` cookbook
-* `another` cookbook
-
-
-# Recipes
-
-## default
-
-Short Description
-
-1. Set up & updates apt using `apt::default`
-2. Install xyz by some proccess
-3. Include various recipes for this cookbook:
-    * `forensic_reporter::install`
-        - which includes `forensic_reporter::another`
-    * `forensic_reporter::configure`
-
-## install
-
-More info about the install recipe
+Installs an extremely simple service to email a report of some important system stats to `root` every minute whenever load average exceeds a certain (configurable) threshold.
 
 # Usage
 
-Include this recipe in a wrapper cookbook:
-
-```
-depends 'forensic_reporter', '~> 1.0'
-```
-
-```
-include_recipe 'forensic_reporter::default'
-```
+Include this recipe in a wrapper cookbook or run list
 
 ## Contributing
 
@@ -49,4 +17,4 @@ include_recipe 'forensic_reporter::default'
 
 ## License and Authors
 
-Author:: The Authors (you@example.com)
+Author:: Evertrue, Inc. (devops+cookbooks@evertrue.com)
