@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+OUTPUT_FILE=/tmp/forensic_reporter.tmp
+LOAD_THRESHOLD=0.50
+
+if [ -f ${OUTPUT_FILE} ]; then
+  rm -f ${OUTPUT_FILE}
+fi
+
+while true; do
+  loadavg=$(cat /proc/loadavg | awk '{print $3}')
+  high_load=$(echo "${loadavg} >= ${LOAD_THRESHOLD}" | bc)
+
+  if [[ $high_load == 1 ]]; then
+    # Datestamp
+    date "+%s - %a %b %d %T %Z %Y" >> ${OUTPUT_FILE}
+
+    # Load Average
+    cat /proc/loadavg >> ${OUTPUT_FILE}
+
+    # Free Memory
+    free >> ${OUTPUT_FILE}
+
+    echo >> ${OUTPUT_FILE}
+
+    # Full process table in tree format
+    ps axjfww >> ${OUTPUT_FILE}
+    echo >> ${OUTPUT_FILE}
+    ps auxww >> ${OUTPUT_FILE}
+
+    echo "---" >> ${OUTPUT_FILE}
+    
+    output_file_ctime=$(head -n 1 ${OUTPUT_FILE} | awk '{print $1}')
+    output_file_age=$(($(date +%s) - $output_file_ctime))
+
+    # Send the email
+    if [ $output_file_age -gt 60 ]; then
+      cat ${OUTPUT_FILE} | mail -s "Overage report for $(hostname -s)" root
+      rm -f ${OUTPUT_FILE}
+    fi
+  elif [ -f ${OUTPUT_FILE} ]; then
+    # Delete the report file if the problem fixes itself
+    rm -f ${OUTPUT_FILE}
+  fi
+  sleep 15
+done
