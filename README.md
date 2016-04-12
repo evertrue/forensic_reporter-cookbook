@@ -1,10 +1,16 @@
-# forensic_reporter [![Build Status](https://travis-ci.org/evertrue/forensic_reporter-cookbook.svg)](https://travis-ci.org/evertrue/forensic_reporter-cookbook)
+# Forensic Reporter
+
+![Detective Dog](http://ops.evertrue.com.s3.amazonaws.com/public/Detective-Dog--125703.jpg)
 
 Installs an extremely simple service to email a report of some important system stats to `root` every minute whenever load average exceeds a certain (configurable) threshold.
 
 # Usage
 
 Include this recipe in a wrapper cookbook or run list
+
+```ruby
+include_recipe 'forensic_reporter'
+```
 
 ## Contributing
 
