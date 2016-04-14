@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 OUTPUT_FILE=/tmp/forensic_reporter.tmp
-LOAD_THRESHOLD=1.50
+LOAD_THRESHOLD=0.90
 
 if [ -f ${OUTPUT_FILE} ]; then
   rm -f ${OUTPUT_FILE}
