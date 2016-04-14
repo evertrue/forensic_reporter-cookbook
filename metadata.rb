@@ -4,7 +4,7 @@ maintainer_email 'devops+cookbooks@evertrue.com'
 license          'all_rights'
 description      'Installs/Configures forensic_reporter'
 long_description 'Installs/Configures forensic_reporter'
-version          '1.0.1'
+version          '1.0.2'
 
 supports 'ubuntu', '>= 14.04'
 

@@ -7,10 +7,12 @@ This is the Changelog for the forensic_reporter cookbook.
 
 ### Fixes
 
-## v0.0.1 - (YYYY-MM-DD)
+## v1.0.2 - (2016-04-13)
 
 ### Added
 
 ### Changed
+
+* New loadavg threshold: 0.90
 
 ### Removed
