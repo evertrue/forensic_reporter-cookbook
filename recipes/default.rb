@@ -34,4 +34,9 @@ service 'forensic_reporter' do
   supports restart: true, status: true
   provider Chef::Provider::Service::Upstart
   action %i(start enable)
+  %w(
+    cookbook_file[/usr/local/bin/forensic_reporter]
+    cookbook_file[/etc/init/forensic_reporter.conf]
+    file[/etc/forensic_reporter.conf]
+  ).each { |subscription| subscribes :restart, subscription }
 end
