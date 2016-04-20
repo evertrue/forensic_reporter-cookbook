@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-OUTPUT_FILE=/tmp/forensic_reporter.tmp
-LOAD_THRESHOLD=0.90
+source /etc/forensic_reporter.conf
 
 if [ -f ${OUTPUT_FILE} ]; then
   rm -f ${OUTPUT_FILE}
@@ -34,7 +33,7 @@ while true; do
     output_file_age=$(($(date +%s) - $output_file_ctime))
 
     # Send the email
-    if [ $output_file_age -gt 60 ]; then
+    if [ $output_file_age -gt $REPORT_DELAY_SECS ]; then
       cat ${OUTPUT_FILE} | mail -s "Overage report for $(hostname -s)" root
       rm -f ${OUTPUT_FILE}
     fi

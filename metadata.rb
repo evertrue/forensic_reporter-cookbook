@@ -10,3 +10,5 @@ supports 'ubuntu', '>= 14.04'
 
 source_url 'https://github.com/evertrue/forensic_reporter-cookbook' if respond_to?(:source_url)
 issues_url 'https://github.com/evertrue/forensic_reporter-cookbook/issues' if respond_to?(:issues_url)
+
+depends 'magic'

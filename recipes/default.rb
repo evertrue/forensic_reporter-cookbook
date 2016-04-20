@@ -4,6 +4,10 @@
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
+file '/etc/forensic_reporter.conf' do
+ content lazy { (exports_config(node['forensic_reporter']['env']) + "\n") }
+end
+
 cookbook_file '/usr/local/bin/forensic_reporter' do
   mode 0755
 end
