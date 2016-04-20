@@ -2,8 +2,8 @@
 
 source /etc/forensic_reporter.conf
 
-if [ -f ${OUTPUT_FILE} ]; then
-  rm -f ${OUTPUT_FILE}
+if [ -d ${OUTPUT_DIR} ]; then
+  rm -rf ${OUTPUT_DIR}
 fi
 
 while true; do
@@ -11,35 +11,44 @@ while true; do
   high_load=$(echo "${loadavg} >= ${LOAD_THRESHOLD}" | bc)
 
   if [[ $high_load == 1 ]]; then
+    if [ ! -d ${OUTPUT_DIR} ]; then
+      mkdir -p ${OUTPUT_DIR}
+    fi
+
     # Datestamp
-    date "+%s - %a %b %d %T %Z %Y" >> ${OUTPUT_FILE}
+    datestamp=$(date "+%F-%H-%M-%S-%Z")
+    output_file="${OUTPUT_DIR}/${datestamp}"
 
     # Load Average
-    cat /proc/loadavg >> ${OUTPUT_FILE}
+    cat /proc/loadavg >> "${output_file}"
 
     # Free Memory
-    free >> ${OUTPUT_FILE}
+    free >> "${output_file}"
 
-    echo >> ${OUTPUT_FILE}
+    echo >> "${output_file}"
 
     # Full process table in tree format
-    ps axjfww >> ${OUTPUT_FILE}
-    echo >> ${OUTPUT_FILE}
-    ps auxww >> ${OUTPUT_FILE}
-
-    echo "---" >> ${OUTPUT_FILE}
+    ps axjfww >> "${output_file}"
+    echo >> "${output_file}"
+    ps auxww >> "${output_file}"
     
-    output_file_ctime=$(head -n 1 ${OUTPUT_FILE} | awk '{print $1}')
-    output_file_age=$(($(date +%s) - $output_file_ctime))
+    oldest_file=$(ls -1tr ${OUTPUT_DIR}/* | head -n 1)
+    oldest_file_ctime=$(stat -c %Y "${oldest_file}")
+    oldest_file_age=$(($(date +%s) - $oldest_file_ctime))
 
     # Send the email
-    if [ $output_file_age -gt $REPORT_DELAY_SECS ]; then
-      cat ${OUTPUT_FILE} | mail -s "Overage report for $(hostname -s)" root
-      rm -f ${OUTPUT_FILE}
+    if [ $oldest_file_age -gt $REPORT_DELAY_SECS ]; then
+      echo "loadavg: $(cat /proc/loadavg)" \
+        | mail \
+          -s "Overage report for $(hostname -s)" \
+          -A $(find ${OUTPUT_DIR} -type f) \
+          root
+      # Delete the reports we've already emailed
+      rm -f ${OUTPUT_DIR}/*
     fi
-  elif [ -f ${OUTPUT_FILE} ]; then
-    # Delete the report file if the problem fixes itself
-    rm -f ${OUTPUT_FILE}
+  elif [ -d ${OUTPUT_DIR} ]; then
+    # Delete the report directory if the problem fixes itself
+    rm -rf ${OUTPUT_DIR}
   fi
   sleep 15
 done
