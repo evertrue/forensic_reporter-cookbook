@@ -18,3 +18,7 @@ suites:
     run_list:
       - recipe[forensic_reporter::default]
     attributes:
+      forensic_reporter:
+        env:
+          LOAD_THRESHOLD: '0.00'
+          REPORT_DELAY_SECS: 0
