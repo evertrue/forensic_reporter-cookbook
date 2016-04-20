@@ -4,6 +4,16 @@
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
+if node['platform_family'] == 'debian'
+  include_recipe 'apt'
+  resources(execute: 'apt-get update').run_action(:run)
+end
+
+%w(
+  mailutils
+  bc
+).each { |pkg| package pkg }
+
 file '/etc/forensic_reporter.conf' do
  content lazy { (exports_config(node['forensic_reporter']['env']) + "\n") }
 end

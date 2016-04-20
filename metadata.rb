@@ -12,3 +12,4 @@ source_url 'https://github.com/evertrue/forensic_reporter-cookbook' if respond_t
 issues_url 'https://github.com/evertrue/forensic_reporter-cookbook/issues' if respond_to?(:issues_url)
 
 depends 'magic'
+depends 'apt'
