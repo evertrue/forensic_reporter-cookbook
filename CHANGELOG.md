@@ -7,6 +7,16 @@ This is the Changelog for the forensic_reporter cookbook.
 
 ### Fixes
 
+## v1.0.4 - (2016-04-20)
+
+### Added
+
+### Changed
+
+* Send attachments instead of an email with a giant body
+* Restart service when changing configs
+* Install prerequisite packages
+
 ## v1.0.3 - (2016-04-20)
 
 ### Added
