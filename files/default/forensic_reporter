@@ -17,7 +17,7 @@ while true; do
 
     # Datestamp
     datestamp=$(date "+%F-%H-%M-%S-%Z")
-    output_file="${OUTPUT_DIR}/${datestamp}"
+    output_file="${OUTPUT_DIR}/${datestamp}.txt"
 
     # Load Average
     cat /proc/loadavg >> "${output_file}"
