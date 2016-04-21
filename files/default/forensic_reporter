@@ -18,6 +18,7 @@ while true; do
     # Datestamp
     datestamp=$(date "+%F-%H-%M-%S-%Z")
     output_file="${OUTPUT_DIR}/${datestamp}.txt"
+    mail_attachment_args="${mail_attachment_args} -A ${output_file}"
 
     # Load Average
     cat /proc/loadavg >> "${output_file}"
@@ -37,18 +38,22 @@ while true; do
     oldest_file_age=$(($(date +%s) - $oldest_file_ctime))
 
     # Send the email
-    if [ $oldest_file_age -gt $REPORT_DELAY_SECS ]; then
+    if [ $oldest_file_age -ge $REPORT_DELAY_SECS ]; then
       echo "loadavg: $(cat /proc/loadavg)" \
         | mail \
           -s "Overage report for $(hostname -s)" \
-          -A $(find ${OUTPUT_DIR} -type f) \
+          ${mail_attachment_args} \
           ${REPORT_EMAIL}
       # Delete the reports we've already emailed
+      mail_attachment_args=''
       rm -f ${OUTPUT_DIR}/*
     fi
-  elif [ -d ${OUTPUT_DIR} ]; then
-    # Delete the report directory if the problem fixes itself
-    rm -rf ${OUTPUT_DIR}
+  else
+    if [ -d ${OUTPUT_DIR} ]; then
+      # Delete the report directory if the problem fixes itself
+      rm -rf ${OUTPUT_DIR}
+    fi
+    mail_attachment_args=''
   fi
   sleep 15
 done
