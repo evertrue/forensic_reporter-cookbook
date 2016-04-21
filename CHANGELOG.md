@@ -7,6 +7,17 @@ This is the Changelog for the forensic_reporter cookbook.
 
 ### Fixes
 
+## v1.0.5 - (2016-04-21)
+
+### Added
+
+* Append .txt to email attachment filenames
+
+### Changed
+
+* Set default interval to 35 secs
+* Fix issue wherein emails would only contain the first generated report
+
 ## v1.0.4 - (2016-04-20)
 
 ### Added
